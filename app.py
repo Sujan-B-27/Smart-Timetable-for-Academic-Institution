@@ -26,6 +26,9 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 CORS(app)
 
+with app.app_context():
+    db.create_all()
+
 DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 # In-memory fixed slots (frontend sends full list each time)
@@ -1253,6 +1256,4 @@ def generate_pdf(section_id):
 # MAIN
 # -----------------------------------------------------------
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
