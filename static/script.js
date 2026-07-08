@@ -2,7 +2,7 @@
 //  script.js  (UPDATED WITH EDIT+DELETE & GAP WARNING)
 // ================================================================
 
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = window.location.origin;
 
 let availableLecturers = [];
 let availableSubjects = [];
@@ -123,7 +123,7 @@ async function loadInitialData() {
         text: `${t.name} (${t.start}-${t.end}) ${t.is_break ? "[BREAK]" : ""}`,
         data: t,
       })),
-      "timeslots"
+      "timeslots",
     );
 
     renderList(
@@ -133,7 +133,7 @@ async function loadInitialData() {
         text: s.display_name,
         data: s,
       })),
-      "sections"
+      "sections",
     );
 
     renderList(
@@ -143,7 +143,7 @@ async function loadInitialData() {
         text: `${a.section}: ${a.subject} → ${a.lecturer} (${a.weekly_count}x/week)`,
         data: a,
       })),
-      "assignments"
+      "assignments",
     );
 
     populateSelect(
@@ -151,21 +151,21 @@ async function loadInitialData() {
       availableSections,
       "id",
       "display_name",
-      "-- Select Section --"
+      "-- Select Section --",
     );
     populateSelect(
       "assign-subject",
       availableSubjects,
       "id",
       "name",
-      "-- Select Subject --"
+      "-- Select Subject --",
     );
     populateSelect(
       "assign-lecturer",
       availableLecturers,
       "id",
       "name",
-      "-- Select Lecturer --"
+      "-- Select Lecturer --",
     );
 
     populateSectionTabs(availableSections);
@@ -175,14 +175,14 @@ async function loadInitialData() {
       availableSubjects,
       "id",
       "name",
-      "-- Select Subject --"
+      "-- Select Subject --",
     );
     populateSelect(
       "lecturer-select",
       availableLecturers,
       "id",
       "name",
-      "-- Select Lecturer --"
+      "-- Select Lecturer --",
     );
   } catch (err) {
     alert("Backend not running.");
@@ -419,9 +419,8 @@ function handleSlotClick(cell) {
   const slot = definedTimeSlots.find((s) => s.id == slotId);
 
   document.getElementById("modal-title").innerText = `Assign Slot (${day})`;
-  document.getElementById(
-    "modal-subtitle"
-  ).innerText = `${slot.name} (${slot.start}-${slot.end})`;
+  document.getElementById("modal-subtitle").innerText =
+    `${slot.name} (${slot.start}-${slot.end})`;
 
   const subjectSelect = document.getElementById("subject-select");
   const lecturerSelect = document.getElementById("lecturer-select");
@@ -484,7 +483,7 @@ async function saveFixedSlot() {
         fs.class_section_id === sectionId &&
         fs.time_slot_id === slotId &&
         fs.day === day
-      )
+      ),
   );
 
   // add new
@@ -511,7 +510,7 @@ async function saveFixedSlot() {
           fs.class_section_id === sectionId &&
           fs.time_slot_id === slotId &&
           fs.day === day
-        )
+        ),
     );
     return;
   }
@@ -542,7 +541,7 @@ async function removeFixedSlot() {
         fs.class_section_id === sectionId &&
         fs.time_slot_id === slotId &&
         fs.day === day
-      )
+      ),
   );
 
   const ok = await syncFixedSlotsToServer();
@@ -561,7 +560,7 @@ function findFixedSlot(sectionId, slotId, day) {
     (fs) =>
       fs.class_section_id === sectionId &&
       fs.time_slot_id === slotId &&
-      fs.day === day
+      fs.day === day,
   );
 }
 
@@ -587,7 +586,7 @@ function displayGeneratedTimetable(data) {
   definedTimeSlots.forEach((slot) => {
     days.forEach((day) => {
       const cell = document.querySelector(
-        `.grid-cell[data-day="${day}"][data-timeslotid="${slot.id}"][data-sectionid="${currentSectionId}"]`
+        `.grid-cell[data-day="${day}"][data-timeslotid="${slot.id}"][data-sectionid="${currentSectionId}"]`,
       );
 
       if (
@@ -874,7 +873,7 @@ async function handleAddSlot(e) {
           end_time: end,
           is_break,
         },
-        "Slot Added"
+        "Slot Added",
       );
     }
 
@@ -971,7 +970,7 @@ async function handleAddSection(e) {
           department: dept,
           class_adviser: adviser,
         },
-        "Section Added"
+        "Section Added",
       );
     }
 
@@ -1111,7 +1110,7 @@ async function handleAddAssignment(e) {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       const json = await res.json();
